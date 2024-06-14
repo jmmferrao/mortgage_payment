@@ -1,9 +1,8 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from pandasgui import show
-import seaborn as sns
 from matplotlib.animation import PillowWriter, FuncAnimation
+import streamlit as st
 
 
 class LoanDetails:
@@ -143,17 +142,17 @@ class LoanDetails:
                 monthly_rate_value = monthly_rate[c]
             
         df = pd.DataFrame({'Month': month_list,
-                        'Payment': payment_list,
-                        'Interest part': interest_list,
+                        'Payment (€)': payment_list,
+                        'Interest part (€)': interest_list,
                         'Interest percentage': interest_percentage_list,
-                        'Capital part': capital_list,
+                        'Capital part (€)': capital_list,
                         'Capital percentage': capital_percentage_list,
-                        'Principal left': principal_left_list,
-                        'Interest Accumulated': interest_accumulated_list})
+                        'Principal left (€)': principal_left_list,
+                        'Interest Accumulated (€)': interest_accumulated_list})
         
         return df
     
-    def total_amount_to_repay(self) -> str:
+    def total_amount_to_repay(self) -> float:
         
         """
         Calculate and print the total amount to be repaid over the life of the loan.
@@ -161,8 +160,7 @@ class LoanDetails:
         This method calculates the total repayment amount for the loan based on its type (Fixed, Variable, or Mix).
         It sums up the total payments made over the loan term and prints the result.
 
-        :return: None
-        :raises ValueError: If the loan type is invalid.
+        :return: float
         """
 
         monthly_payment_list = LoanDetails.monthly_payment_amount(self)
@@ -174,8 +172,9 @@ class LoanDetails:
             
         final_value = sum(final_value)
         
+        return final_value
         
-        print(f"The total amount to repay the bank (capital + interest) is equal to EUR: {final_value:,.2f}")
+        #print(f"The total amount to repay the bank (capital + interest) is equal to EUR: {final_value:,.2f}")
 
 def plot_capital_evolution(df: pd.DataFrame):
     plt.figure(figsize=(12,8))
@@ -259,19 +258,34 @@ def plot_payment_decomposition_animated(filename: str, x: pd.Series, y1 = pd.Ser
 
     plt.close()
     
-house_1 = LoanDetails(principal=300000, annual_rates=[0.01,2.5,3.5,4,2.5], years=[5,5,5,5,5])
+
+###############
+# Streamlite
+###############
+
+#title and inputs
+st.write('<h1 style="text-align: center;">Simulação de empréstimo</h1>', unsafe_allow_html=True)
+
+st.write('<h3 style="text-align: center;"> Inputs </h3>', unsafe_allow_html=True)
+capital = st.number_input("Capital (em €)", min_value=1, value=300000)
+rate = st.number_input("Taxa de juro (em %)", min_value=0.01, value = 3.00)
+years = st.number_input("Número de períodos (em anos)", min_value=1, value = 30)
+
+#create the object
+house_1 = LoanDetails(principal=capital, annual_rates=[rate], years=[years])
 df_house_1 = house_1.payment_decomposition()
-show(df_house_1)
-#house_1.total_amount_to_repay()
-#plot_capital_evolution(df_house_1)
-#plot_payment_decomposition(df_house_1)
-#plt.close()
 
-house_2 = LoanDetails(principal=300000, annual_rates=[1.5], years=[25])
-df_house_2 = house_2.payment_decomposition()
-show(df_house_2)
-x = df_house_1['Month']
-y1 = df_house_1['Interest Accumulated']
-y2 = df_house_2['Interest Accumulated']
+#criar as 3 variáveis principais a mostrar ao user
+st.write('<h3 style="text-align: center;">Visão geral</h3>', unsafe_allow_html=True)
+col1, col2, col3 = st.columns(3)
+col1.metric(label="Prestação Mensal", value=f'€ {df_house_1["Payment (€)"].iloc[0]:,.2f}')
+col2.metric(label="MTIC", value = f'€ {house_1.total_amount_to_repay():,.2f}')
+col3.metric(label="Total de juros", value=f'€ {df_house_1["Interest Accumulated (€)"].iloc[-1]:,.2f}')
 
-plot_payment_decomposition_animated(filename='loan_compar.gif', x = x, y1=y1, y2=y2)
+#criar line chart
+st.write('<h3 style="text-align: center;"> Evolução do capital em dívida </h3>', unsafe_allow_html=True)
+chart_df = df_house_1[["Month", "Principal left (€)"]].groupby("Month").min()
+st.line_chart(chart_df)
+
+#criar dataframe com o detalhe
+st.write(df_house_1)
