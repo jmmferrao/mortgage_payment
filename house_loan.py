@@ -258,34 +258,3 @@ def plot_payment_decomposition_animated(filename: str, x: pd.Series, y1 = pd.Ser
 
     plt.close()
     
-
-###############
-# Streamlite
-###############
-
-#title and inputs
-st.write('<h1 style="text-align: center;">Simulação de empréstimo</h1>', unsafe_allow_html=True)
-
-st.write('<h3 style="text-align: center;"> Inputs </h3>', unsafe_allow_html=True)
-capital = st.number_input("Capital (em €)", min_value=1, value=300000)
-rate = st.number_input("Taxa de juro (em %)", min_value=0.01, value = 3.00)
-years = st.number_input("Número de períodos (em anos)", min_value=1, value = 30)
-
-#create the object
-house_1 = LoanDetails(principal=capital, annual_rates=[rate], years=[years])
-df_house_1 = house_1.payment_decomposition()
-
-#criar as 3 variáveis principais a mostrar ao user
-st.write('<h3 style="text-align: center;">Visão geral</h3>', unsafe_allow_html=True)
-col1, col2, col3 = st.columns(3)
-col1.metric(label="Prestação Mensal", value=f'€ {df_house_1["Payment (€)"].iloc[0]:,.2f}')
-col2.metric(label="MTIC", value = f'€ {house_1.total_amount_to_repay():,.2f}')
-col3.metric(label="Total de juros", value=f'€ {df_house_1["Interest Accumulated (€)"].iloc[-1]:,.2f}')
-
-#criar line chart
-st.write('<h3 style="text-align: center;"> Evolução do capital em dívida </h3>', unsafe_allow_html=True)
-chart_df = df_house_1[["Month", "Principal left (€)"]].groupby("Month").min()
-st.line_chart(chart_df)
-
-#criar dataframe com o detalhe
-st.write(df_house_1)
