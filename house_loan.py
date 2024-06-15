@@ -2,8 +2,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import PillowWriter, FuncAnimation
-import streamlit as st
-
 
 class LoanDetails:
     
@@ -38,7 +36,7 @@ class LoanDetails:
         Returns:
         -------
         -list.
-        A list of monthly payment amounts for each period.
+            A list of monthly payment amounts for each period.
         """
         
         monthly_rates = [rate / 12 / 100 for rate in self.annual_rates]
@@ -74,16 +72,16 @@ class LoanDetails:
         Returns:
         -------
         pd.DataFrame
-            A DataFrame containing the breakdown of each monthly payment into interest and principal parts,
-            along with their respective percentages, and the remaining principal after each payment.
+            A DataFrame containing the breakdown of each monthly payment into interest and principal parts, along with their respective percentages, and the remaining principal after each payment.
             The columns are:
             - 'Month': The month number.
             - 'Payment': The total payment amount for the month.
-            - 'Interest part': The portion of the payment that goes towards interest.
+            - 'Interest part (€)': The portion of the payment that goes towards interest.
             - 'Interest percentage': The percentage of the payment that goes towards interest.
-            - 'Capital part': The portion of the payment that goes towards the principal.
+            - 'Capital part (€)': The portion of the payment that goes towards the principal.
             - 'Capital percentage': The percentage of the payment that goes towards the principal.
             - 'Principal left': The remaining principal after the payment.
+            - 'Interest Accumulated (€)': The total amount of interest already paid at each period.
         """
         
         monthly_payment = LoanDetails.monthly_payment_amount(self) 
@@ -140,7 +138,8 @@ class LoanDetails:
                 c += 1
                 monthly_payment_value = monthly_payment[c]
                 monthly_rate_value = monthly_rate[c]
-            
+        
+        
         df = pd.DataFrame({'Month': month_list,
                         'Payment (€)': payment_list,
                         'Interest part (€)': interest_list,
@@ -157,9 +156,8 @@ class LoanDetails:
         """
         Calculate and print the total amount to be repaid over the life of the loan.
 
-        This method calculates the total repayment amount for the loan based on its type (Fixed, Variable, or Mix).
-        It sums up the total payments made over the loan term and prints the result.
-
+        This method calculates the total repayment amount for the loan based on its type.
+        
         :return: float
         """
 
@@ -257,4 +255,3 @@ def plot_payment_decomposition_animated(filename: str, x: pd.Series, y1 = pd.Ser
     ani.save(filename, writer=writer)
 
     plt.close()
-    
