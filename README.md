@@ -44,12 +44,12 @@ To use the Streamlit interface, follow these steps after running the app:
 
 The app will validate the inputs and display detailed loan payment information, including:
 
-. Maximum monthly payment
-. Total amount charged
-. Total interest paid
-. Principal repayment evolution
-. Interest payment evolution
-. Detailed monthly decomposition
+- Maximum monthly payment
+- Total amount charged
+- Total interest paid
+- Principal repayment evolution
+- Interest payment evolution
+- Detailed monthly decomposition
 
 ## Contributing
 Contributions are welcome! Please follow these steps:
