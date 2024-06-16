@@ -36,11 +36,12 @@ Run the main script to start the calculator:
 ```bash
 streamlit run main.py
 ```
-To use the Streamlit interface, follow these steps after running the app:
+To use the Streamlit interface, follow these steps:
 
-1. Enter the loan amount (capital).
-2. Provide the interest rates (comma-separated if multiple).
-3. Provide the loan periods in years (comma-separated if multiple).
+1. Go to the app (https://loansimulation.streamlit.app/)
+2. Enter the loan amount (capital).
+3. Provide the interest rates (comma-separated if multiple).
+4. Provide the loan periods in years (comma-separated if multiple).
 
 The app will validate the inputs and display detailed loan payment information, including:
 
