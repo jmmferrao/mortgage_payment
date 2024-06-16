@@ -1,1 +1,1 @@
-# A simple app to calculate the loan payments
+A simple app to compute loan repayments where it is possible to manipulate interest rates and periods at will.
