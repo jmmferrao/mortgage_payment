@@ -7,9 +7,7 @@ A simple Python application to compute loan repayments, allowing users to manipu
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Example](#example)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -36,4 +34,28 @@ A simple Python application to compute loan repayments, allowing users to manipu
 
 Run the main script to start the calculator:
 ```bash
-python main.py
+streamlit run main.py
+```
+To use the Streamlit interface, follow these steps after running the app:
+
+1. Enter the loan amount (capital).
+2. Provide the interest rates (comma-separated if multiple).
+3. Provide the loan periods in years (comma-separated if multiple).
+
+The app will validate the inputs and display detailed loan payment information, including:
+
+. Maximum monthly payment
+. Total amount charged
+. Total interest paid
+. Principal repayment evolution
+. Interest payment evolution
+. Detailed monthly decomposition
+
+## Contributing
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch (git checkout -b feature-branch).
+3. Make your changes and commit them (git commit -am 'Add new feature').
+4. Push to the branch (git push origin feature-branch).
+5. Create a new Pull Request.
